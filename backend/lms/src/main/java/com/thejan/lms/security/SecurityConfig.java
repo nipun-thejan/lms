@@ -29,8 +29,9 @@ public class SecurityConfig {
             .headers().frameOptions().disable() // New Line: the h2 console runs on a "frame". By default, Spring Security prevents rendering within an iframe. This line disables its prevention.
             .and()
             .csrf().disable()
-            .authorizeRequests()  
-            .anyRequest().authenticated()
+                .authorizeRequests()
+                .requestMatchers(HttpMethod.POST, SecurityConstants.REGISTER_PATH).permitAll()
+                .anyRequest().authenticated()
             .and()
             .addFilterBefore(new ExceptionHandlerFilter(), AuthenticationFilter.class)
             .addFilter(authenticationFilter)
