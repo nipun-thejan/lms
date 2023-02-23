@@ -94,7 +94,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
         var token = Token.builder()
                 .user(user)
                 .token(jwtToken)
-                .tokenType(SecurityConstants.BEARER)
+//                .tokenType(SecurityConstants.BEARER)
                 .expired(false)
                 .revoked(false)
                 .build();

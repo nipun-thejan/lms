@@ -15,13 +15,13 @@ import lombok.NoArgsConstructor;
 public class Token {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
 
     @Column(unique = true)
     public String token;
 
-    public String tokenType = SecurityConstants.BEARER;
+    public final String tokenType = SecurityConstants.BEARER;
 
     public boolean revoked;
 

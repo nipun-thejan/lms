@@ -5,6 +5,7 @@ import com.thejan.lms.entity.User;
 import com.thejan.lms.exception.EntityNotFoundException;
 import com.thejan.lms.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.apache.catalina.mapper.Mapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,17 @@ public class UserServiceImpl implements UserService {
     public User saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    @Override
+    public Object getProfile(String email) {
+        User user = getUser(email);
+//        return
+    }
+
+    @Override
+    public Object getProfile(Long id) {
+        return null;
     }
 
     static User unwrapUser(Optional<User> entity, Long id) {

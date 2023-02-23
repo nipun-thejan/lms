@@ -8,4 +8,7 @@ public interface UserService {
     User getUser(String username);
     User saveUser(User user);
 
+    Object getProfile(String email);
+    Object getProfile(Long id);
+
 }

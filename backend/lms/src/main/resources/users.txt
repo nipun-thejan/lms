@@ -1,0 +1,21 @@
+{
+    "firstname": "thejan",
+    "lastname":"fonseka",
+    "email":"thejan@gmail.com",
+    "password":"123",
+    "role":"STUDENT"
+},
+{
+    "firstname": "supunsara",
+    "lastname":"sara",
+    "email":"pasidu@gmail.com",
+    "password":"123",
+    "role":"ADMIN"
+},
+{
+    "firstname": "sahana",
+    "lastname":"sahana",
+    "email":"sahana@gmail.com",
+    "password":"123",
+    "role":"TEACHER"
+}
