@@ -23,10 +23,10 @@ public class UserController {
 		return new ResponseEntity<>(userService.getUser(id).getEmail(), HttpStatus.OK);
 	}
 
-    @PostMapping("/register")
-	public ResponseEntity<HttpStatus> createUser(@Valid @RequestBody User user) {
-		userService.saveUser(user);
-		return new ResponseEntity<>(HttpStatus.CREATED);
-	}
+//    @PostMapping("/register")
+//	public ResponseEntity<HttpStatus> createUser(@Valid @RequestBody User user) {
+//		userService.saveUser(user);
+//		return new ResponseEntity<>(HttpStatus.CREATED);
+//	}
 
 }

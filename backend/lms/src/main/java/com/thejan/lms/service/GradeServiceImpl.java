@@ -8,7 +8,6 @@ import com.thejan.lms.exception.GradeNotFoundException;
 import com.thejan.lms.exception.StudentNotEnrolledException;
 import com.thejan.lms.repository.CourseRepository;
 import com.thejan.lms.repository.GradeRepository;
-import com.thejan.lms.repository.StudentRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +17,10 @@ import java.util.Optional;
 @AllArgsConstructor
 @Service
 public class GradeServiceImpl implements GradeService {
-    
+
     private GradeRepository gradeRepository;
-    private StudentRepository studentRepository;
     private CourseRepository courseRepository;
-    
+
     @Override
     public Grade getGrade(Long studentId, Long courseId) {
          Optional<Grade> grade = gradeRepository.findByStudentIdAndCourseId(studentId, courseId);
@@ -31,12 +29,12 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public Grade saveGrade(Grade grade, Long studentId, Long courseId) {
-        Student student = StudentServiceImpl.unwrapStudent(studentRepository.findById(studentId), studentId);
-        Course course = CourseServiceImpl.unwrapCourse(courseRepository.findById(courseId), courseId);
-        if (!student.getCourses().contains(course)) throw new StudentNotEnrolledException(studentId, courseId);
-        grade.setStudent(student);
-        grade.setCourse(course);
-        return gradeRepository.save(grade);
+//        Student student = StudentServiceImpl.unwrapStudent(studentRepository.findById(studentId), studentId);
+//        Course course = CourseServiceImpl.unwrapCourse(courseRepository.findById(courseId), courseId);
+//        if (!student.getCourses().contains(course)) throw new StudentNotEnrolledException(studentId, courseId);
+//        grade.setStudent(student);
+//        grade.setCourse(course);
+        return null;
     }
 
     @Override

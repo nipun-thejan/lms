@@ -3,20 +3,23 @@ package com.thejan.lms.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 
 
 @Entity
 @Table(name = "users")
-/*
- * 'user' is a reserved keyword in SQL, so we name our table users. If you name it user, you will get a org.h2.jdbc.JdbcSQLSyntaxErrorException. 
- *  See https://docs.microsoft.com/en-us/sql/t-sql/language-elements/reserved-keywords-transact-sql?view=sql-server-ver16 for a list of reserved keywords.
- */
+@Builder
 @Getter
 @Setter
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class User {
+@AllArgsConstructor
+public class User implements UserDetails {
 
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +35,56 @@ public class User {
 	@Column(nullable = false)
 	private String password;
 
+	@Column(nullable = false)
+	private String firstName;
 
+	@Column(nullable = false)
+	private String lastName;
 
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Role role;
+
+//	@Past(message = "The birth date must be in the past")
+//	@NonNull
+//	@Column(name = "birth_date", nullable = false)
+//	private LocalDate birthDate;
+
+	public User(User user) {
+		this.id = user.getId();
+		this.firstName = user.getFirstName();
+		this.lastName = user.getLastName();
+		this.email = user.getEmail();
+		this.password = user.getPassword();
+		this.role = user.getRole();
+	}
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority(role.name()));
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 }

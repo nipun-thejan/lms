@@ -5,7 +5,6 @@ import com.thejan.lms.entity.Course;
 import com.thejan.lms.entity.Student;
 import com.thejan.lms.exception.EntityNotFoundException;
 import com.thejan.lms.repository.CourseRepository;
-import com.thejan.lms.repository.StudentRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +17,7 @@ import java.util.Set;
 public class CourseServiceImpl implements CourseService {
 
     private CourseRepository courseRepository;
-    private StudentRepository studentRepository;
-    
+
     @Override
     public Course getCourse(Long id) {
         Optional<Course> course = courseRepository.findById(id);
@@ -32,8 +30,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void deleteCourse(Long id) {  
-        courseRepository.deleteById(id);      
+    public void deleteCourse(Long id) {
+        courseRepository.deleteById(id);
     }
 
     @Override
@@ -44,9 +42,9 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course addStudentToCourse(Long studentId, Long courseId) {
         Course course = getCourse(courseId);
-        Optional<Student> student = studentRepository.findById(studentId);
-        Student unwrappedStudent = StudentServiceImpl.unwrapStudent(student, studentId);
-        course.getStudents().add(unwrappedStudent);
+//        Optional<Student> student = studentRepository.findById(studentId);
+//        Student unwrappedStudent = StudentServiceImpl.unwrapStudent(student, studentId);
+//        course.getStudents().add(unwrappedStudent);
         return courseRepository.save(course);
     }
 
