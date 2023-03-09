@@ -1,4 +1,4 @@
-package com.thejan.lms.utils;
+package com.thejan.lms.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

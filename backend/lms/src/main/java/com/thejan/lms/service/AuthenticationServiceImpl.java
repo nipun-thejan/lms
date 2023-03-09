@@ -4,13 +4,13 @@ import com.thejan.lms.entity.Token;
 import com.thejan.lms.entity.User;
 import com.thejan.lms.entity.UserFactory;
 import com.thejan.lms.exception.EmailAlreadyExistsException;
+import com.thejan.lms.exception.TokenNotFoundException;
 import com.thejan.lms.repository.TokenRepository;
 import com.thejan.lms.repository.UserRepository;
 import com.thejan.lms.security.JwtService;
-import com.thejan.lms.security.SecurityConstants;
-import com.thejan.lms.utils.AuthenticationRequest;
-import com.thejan.lms.utils.AuthenticationResponse;
-import com.thejan.lms.utils.RegisterRequest;
+import com.thejan.lms.dto.AuthenticationRequest;
+import com.thejan.lms.dto.AuthenticationResponse;
+import com.thejan.lms.dto.RegisterRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -90,6 +90,12 @@ public class AuthenticationServiceImpl implements AuthenticationService{
         }
     }
 
+    @Override
+    public String logout(String token) throws TokenNotFoundException {
+        revokeTokenByToken(token);
+        return "sucesss";
+    }
+
     private void saveUserToken(User user, String jwtToken) {
         var token = Token.builder()
                 .user(user)
@@ -110,6 +116,13 @@ public class AuthenticationServiceImpl implements AuthenticationService{
             token.setExpired(true);
         });
         tokenRepository.saveAll(validUserTokens);
+    }
+
+    private void revokeTokenByToken(String token) throws TokenNotFoundException {
+        Token validToken = tokenRepository.findByToken(token).orElseThrow(() -> new TokenNotFoundException("mmm"));
+        validToken.setRevoked(true);
+        validToken.setExpired(true);
+        tokenRepository.save(validToken);
     }
 }
 

@@ -1,8 +1,11 @@
 package com.thejan.lms.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Getter
@@ -29,5 +32,7 @@ public class Student extends User{
 //        inverseJoinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id")
 //    )
 //    private Set<Course> courses;
-
+    @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private Set<StudentCourseRegistration> registrations = new HashSet<>();
 }

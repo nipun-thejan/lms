@@ -1,4 +1,4 @@
-package com.thejan.lms.utils;
+package com.thejan.lms.dto;
 
 import com.thejan.lms.entity.Role;
 import com.thejan.lms.exception.EmptyRequestValueException;

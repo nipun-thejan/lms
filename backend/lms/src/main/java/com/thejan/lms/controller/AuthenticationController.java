@@ -1,16 +1,13 @@
 package com.thejan.lms.controller;
 
 import com.thejan.lms.service.AuthenticationService;
-import com.thejan.lms.utils.AuthenticationRequest;
-import com.thejan.lms.utils.AuthenticationResponse;
-import com.thejan.lms.utils.RegisterRequest;
+import com.thejan.lms.dto.AuthenticationRequest;
+import com.thejan.lms.dto.AuthenticationResponse;
+import com.thejan.lms.dto.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,5 +24,11 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) throws Exception {
         return ResponseEntity.ok(authenticationService.authenticate(request));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) throws Exception {
+        return ResponseEntity.ok(
+                authenticationService.logout(token.substring(7)));
     }
 }
