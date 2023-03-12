@@ -15,7 +15,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-
 @Configuration
 @AllArgsConstructor
 @EnableWebSecurity
@@ -30,7 +29,7 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/user/**").authenticated()
                 .requestMatchers("/student/**").hasAuthority(Role.STUDENT.name())
                 .requestMatchers("/teacher/**").hasAuthority(Role.TEACHER.name())

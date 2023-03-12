@@ -11,12 +11,15 @@ import java.util.Collection;
 import java.util.List;
 
 
-@Entity
-@Table(name = "users")
+
+//@Table(name = "users")
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+//@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User implements UserDetails {
 
     @Id

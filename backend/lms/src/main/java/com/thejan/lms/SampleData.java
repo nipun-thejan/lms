@@ -6,9 +6,11 @@ import com.thejan.lms.service.CourseService;
 import com.thejan.lms.dto.RegisterRequest;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 
 @RequiredArgsConstructor
+@Component
 public class SampleData {
     private final AuthenticationService authenticationService;
     private final CourseService courseService;

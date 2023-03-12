@@ -1,5 +1,6 @@
 package com.thejan.lms.service;
 
+import com.thejan.lms.dto.RegisterResponse;
 import com.thejan.lms.entity.Token;
 import com.thejan.lms.entity.User;
 import com.thejan.lms.entity.UserFactory;
@@ -33,7 +34,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
 
     @Override
-    public AuthenticationResponse register(RegisterRequest request) throws Exception{
+    public RegisterResponse register(RegisterRequest request) throws Exception{
         try{
             request.validateRegisterRequest();
             System.out.println(request.getFirstName());
@@ -52,9 +53,11 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
             saveUserToken(savedUser, jwtToken);
 
-            return AuthenticationResponse.builder()
+            return RegisterResponse.builder()
                     .token(jwtToken)
-                    .user(user)
+                    .email(user.getEmail())
+                    .name(user.getFirstName()+" "+user.getLastName())
+                    .role(user.getRole())
                     .build();
 
         }catch(DataIntegrityViolationException e){

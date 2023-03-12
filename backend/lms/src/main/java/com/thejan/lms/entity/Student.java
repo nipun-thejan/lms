@@ -14,10 +14,16 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "student")
+//@PrimaryKeyJoinColumn(name = "studentId")
 public class Student extends User{
+
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long studentId;
+    private String major;
 
     public Student(User user) {
         super(user);
+        major="comp";
     }
 
 //    @JsonIgnore

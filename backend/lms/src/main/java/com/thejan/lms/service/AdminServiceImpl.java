@@ -2,6 +2,7 @@ package com.thejan.lms.service;
 
 import com.thejan.lms.dto.AuthenticationResponse;
 import com.thejan.lms.dto.RegisterRequest;
+import com.thejan.lms.dto.RegisterResponse;
 import com.thejan.lms.entity.Role;
 import com.thejan.lms.entity.User;
 import com.thejan.lms.repository.UserRepository;
@@ -19,7 +20,7 @@ public class AdminServiceImpl implements AdminService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-    public AuthenticationResponse assignNewAdmin(RegisterRequest request) throws Exception {
+    public RegisterResponse assignNewAdmin(RegisterRequest request) throws Exception {
         request.setRole(Role.ADMIN);
         return authenticationService.register(request);
     }
