@@ -1,5 +1,6 @@
 package com.thejan.lms.controller;
 
+import com.thejan.lms.dto.RegisterResponse;
 import com.thejan.lms.service.AuthenticationService;
 import com.thejan.lms.dto.AuthenticationRequest;
 import com.thejan.lms.dto.AuthenticationResponse;
@@ -11,13 +12,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/auth")
+@RequestMapping("/auth")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) throws Exception{
+    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request) throws Exception{
         return new ResponseEntity<>(authenticationService.register(request), HttpStatus.OK);
     }
 

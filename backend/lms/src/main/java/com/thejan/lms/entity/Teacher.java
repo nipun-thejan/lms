@@ -14,9 +14,16 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @Table(name = "teacher")
+//@PrimaryKeyJoinColumn(name = "teacherId")
 public class Teacher extends User {
+
+
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long teacherId;
+    private String department;
     public Teacher(User user) {
         super(user);
+        department="cse";
     }
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
