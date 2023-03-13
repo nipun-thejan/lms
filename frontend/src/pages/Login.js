@@ -86,7 +86,7 @@ const Login = () => {
           err={formikLogin.errors.password}
         />
         <button type='submit' className='btn btn-block' disabled={isLoading && !formikLogin.isValid}>
-          submit
+          login
         </button>
         <p>
         Not a member yet?   <Link to="/register"> register</Link>

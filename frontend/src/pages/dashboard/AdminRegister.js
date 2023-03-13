@@ -1,10 +1,10 @@
-import { Logo, Alert } from '../components';
-import Wrapper from '../assets/wrappers/RegisterPage';
-import { useAppContext } from '../context/appContext';
+import { Logo, Alert } from '../../components';
+import Wrapper from '../../assets/wrappers/AdminRegisterPage';
+import { useAppContext } from '../../context/appContext';
 import { Link, useNavigate } from 'react-router-dom';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import FormikRow from '../components/FormikRow';
+import FormikRow from '../../components/FormikRow';
 import * as Yup from 'yup'
 import { useFormik } from 'formik';
 
@@ -51,7 +51,7 @@ const validationSchema = Yup.object({
 
 
 
-const Register = () => {
+const AdminRegister = () => {
   const formik = useFormik({
     initialValues,
     onSubmit,
@@ -68,9 +68,8 @@ const Register = () => {
     <Wrapper className='full-page'>
       
       <form className='form' onSubmit={formik.handleSubmit}>
-      <Logo/>
 
-        <h3>Register</h3>
+        <h3>Admin Register</h3>
         {showAlert && <Alert />}
         {/* name input */}
         
@@ -133,7 +132,7 @@ const Register = () => {
         {/* role */}
 
         <button type='submit' className='btn btn-block' disabled={isLoading && !formik.isValid}>
-          register
+          Register Admin
         </button>
         {/* <p>
           {values.isMember ? 'Not a member yet?' : 'Already a member?'}
@@ -149,4 +148,4 @@ const Register = () => {
     </Wrapper>
   );
 };
-export default Register;
+export default AdminRegister;

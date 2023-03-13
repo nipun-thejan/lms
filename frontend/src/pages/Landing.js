@@ -32,7 +32,7 @@ const Landing = () => {
              comprehensive and user-friendly LMS.
             </p>
             <Link to='/login' className='btn btn-hero'>
-              Login
+              Login / Register
             </Link>
           </div>
           <img src={main} alt='job hunt' className='img main-img' />

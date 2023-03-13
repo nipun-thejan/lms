@@ -6,6 +6,7 @@ import {
   SharedLayout,
   Stats,
   AddJob,
+  AdminRegister
 } from './pages/dashboard'
 
 
@@ -26,7 +27,7 @@ function App() {
           <Route path='all' element={<AllJobs />} />
           <Route path='add' element={<AddJob />} />
           <Route path='profile' element={<Profile />} />
-          <Route path='/admin/register' element={<Register />} />
+          <Route path='/admin/register' element={<AdminRegister />} />
 
         </Route>
         <Route path='/register' element={<Register />} />

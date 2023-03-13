@@ -24,13 +24,24 @@ const Navbar = () => {
             onClick={() => setShowLogout(!showLogout)}
           >
             <FaUserCircle />
-            {user?.name} user name - type
+            {user?.name - user?.type|| 'user name - type'}
             <FaCaretDown />
           </button>
           <div className={showLogout ? 'dropdown show-dropdown' : 'dropdown'}>
+            <>
             <button type='button' className='dropdown-btn' onClick={logoutUser}>
               logout
             </button>
+            </>
+            <>
+            <button type='button' className='dropdown-btn' onClick={logoutUser}>
+              k
+            </button>
+            </>
+            {/* <button type='button' className='dropdown-btn' onClick={logoutUser}>
+              l
+            </button> */}
+            
           </div>
         </div>
       </div>
