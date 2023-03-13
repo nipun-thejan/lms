@@ -49,12 +49,11 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
             var savedUser = userRepository.save(userFactory.getInstance(user));
 
-            var jwtToken = jwtService.generateToken(user);
+//            var jwtToken = jwtService.generateToken(user);
 
-            saveUserToken(savedUser, jwtToken);
+//            saveUserToken(savedUser, jwtToken);
 
             return RegisterResponse.builder()
-                    .token(jwtToken)
                     .email(user.getEmail())
                     .name(user.getFirstName()+" "+user.getLastName())
                     .role(user.getRole())
