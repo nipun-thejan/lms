@@ -4,7 +4,10 @@ const FormikRow = (
     value, 
     onChange, 
     labelText, 
-    onBlur 
+    onBlur ,
+    touch,
+    err
+    
   }) => {
   return (
     <div className='form-row'>
@@ -13,14 +16,22 @@ const FormikRow = (
       </label>
       <input
         type={type}
-        value={value}
+        id={name}
         name={name}
+        value={value}
         onChange={onChange}
         onBlur={onBlur}
         className='form-input'
       />
+      
+      {touch && err ? (
+          <div className='error'>{err}</div>
+        ) : null}
+        
     </div>
   )
 }
+
+
 
 export default FormikRow

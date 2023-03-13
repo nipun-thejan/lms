@@ -1,118 +1,150 @@
-import { useState, useEffect } from 'react';
-import { Logo, FormRow, Alert, Navbar } from '../components';
+import { Logo, Alert } from '../components';
 import Wrapper from '../assets/wrappers/RegisterPage';
 import { useAppContext } from '../context/appContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import FormikRow from '../components/FormikRow';
+import * as Yup from 'yup'
+import { useFormik } from 'formik';
 
-const initialState = {
-  name: '',
+
+const initialValues = {
+  firstName: '',
+  lastName: '',
   email: '',
   password: '',
-  isMember: true,
+  confirmPassword: '',
+  role: ''
 };
+const onSubmit = values => {
+  console.log('Form data', values)
+}
+
+// const onSubmit = values => {
+//   e.preventDefault();
+//   const { firstName, lastName, email, password, role } = values;
+//   // if (!email || !password) {
+//   //   displayAlert();
+//   //   return;
+//   // }
+//   const currentUser = { email, password };
+//   console.log(currentUser)
+//   registerUser({
+//     currentUser,
+//     endPoint: 'auth/register',
+//     alertText: 'User Created',
+//   });
+// }
+
+const validationSchema = Yup.object({
+  firstName: Yup.string().required('Required'),
+  lastName: Yup.string().required('Required'),
+  email: Yup.string()
+    .email('Invalid email format')
+    .required('Required'),
+  password: Yup.string().required('Required'),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref('password'), ''], 'Passwords must match')
+    .required('Required')
+})
+
+
 
 const Register = () => {
+  const formik = useFormik({
+    initialValues,
+    onSubmit,
+    validationSchema
+  })
+
   const navigate = useNavigate();
-  const [values, setValues] = useState(initialState);
+
   const { user, isLoading, showAlert, displayAlert, registerUser } =
     useAppContext();
 
-  const toggleMember = () => {
-    setValues({ ...values, isMember: !values.isMember });
-  };
-
-  const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
-  const onSubmit = (e) => {
-    e.preventDefault();
-    const { name, email, password, isMember } = values;
-    if (!email || !password) {
-      displayAlert();
-      return;
-    }
-    setValues(initialState)
-    const currentUser = { email, password };
-    console.log(currentUser)
-    registerUser({
-      currentUser,
-      endPoint: 'auth/register',
-      alertText: 'User Created',
-    });
-
-  };
-
-  
 
   return (
     <Wrapper className='full-page'>
-      <Tabs
-      defaultActiveKey="home"
-      transition={false}
-      id="noanim-tab-example"
-      className="mb-3"
-    >
-      <Tab eventKey="home" title="Home">vfv
-      </Tab>
-      <Tab eventKey="profile" title="Profile">
-        222222
-      </Tab>
-      <Tab eventKey="contact" title="Contact" disabled>
-        3333333333
-      </Tab>
-    </Tabs>
-      <form className='form' onSubmit={onSubmit}>
+      
+      <form className='form' onSubmit={formik.handleSubmit}>
+      <Logo/>
+
         <h3>Register</h3>
         {showAlert && <Alert />}
         {/* name input */}
-        {/* {!values.isMember && (
-          <FormRow
-            type='text'
-            name='name'
-            value={values.name}
-            handleChange={handleChange}
-          />
-        )} */}
+        
+        {/* first name */}
+        <FormikRow
+          type='text'
+          labelText="First Name"
+          name='firstName'
+          value={formik.values.firstName}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          touch={formik.touched.firstName}
+          err={formik.errors.firstName}
+        />
+        {/* lastname */}
+        <FormikRow
+          type='text'
+          name='lastName'
+          labelText="Last Name"
+          value={formik.values.lastName}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          touch={formik.touched.lastName}
+          err={formik.errors.lastName}
+        />
 
         {/* email input */}
-        <FormRow
+        <FormikRow
           type='email'
           name='email'
-          value={values.email}
-          handleChange={handleChange}
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          touch={formik.touched.email}
+          err={formik.errors.email}
         />
+
         {/* password input */}
-        <FormRow
+        <FormikRow
           type='password'
           name='password'
-          value={values.password}
-          handleChange={handleChange}
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          touch={formik.touched.password}
+          err={formik.errors.password}
         />
-        <button type='submit' className='btn btn-block' disabled={isLoading}>
+        <FormikRow
+          type='password'
+          name='confirmPassword'
+          value={formik.values.confirmPassword}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          touch={formik.touched.confirmPassword}
+          err={formik.errors.confirmPassword}
+        />
+        {/* {formik.touched.name && formik.errors.name ? (
+          <div className='error'>{formik.errors.name}</div>
+        ) : null} */}
+        {/* role */}
+
+        <button type='submit' className='btn btn-block' disabled={isLoading && !formik.isValid}>
           submit
         </button>
-        {/* <button
-          type='button'
-          className='btn btn-block btn-hipster'
-          disabled={isLoading}
-          onClick={() => {
-            setupUser({
-              currentUser: { email: 'testUser@test.com', password: 'secret' },
-              endPoint: 'login',
-              alertText: 'Login Successful! Redirecting...',
-            });
-          }}
-        >
-          {isLoading ? 'loading...' : 'demo app'}
-        </button> */}
         {/* <p>
           {values.isMember ? 'Not a member yet?' : 'Already a member?'}
           <button type='button' onClick={toggleMember} className='member-btn'>
             {values.isMember ? 'Register' : 'Login'}
           </button>
         </p> */}
+        <p>
+          Already a member?   <Link to="/login"> login</Link>
+        
+        </p>
       </form>
     </Wrapper>
   );
