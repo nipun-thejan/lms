@@ -17,6 +17,11 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
+    @GetMapping("/hi")
+    public String hi() {
+        return "Hellllo";
+    }
+
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request) throws Exception{
         return new ResponseEntity<>(authenticationService.register(request), HttpStatus.OK);

@@ -6,10 +6,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode()
 public class Admin extends User{
     public Admin(User user) {
         super(user);

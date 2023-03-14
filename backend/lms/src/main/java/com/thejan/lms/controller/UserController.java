@@ -19,6 +19,8 @@ public class UserController {
 
     private final UserService userService;
 
+
+
 	@GetMapping("/{id}")
 	public ResponseEntity<String> findById(@PathVariable Long id) {
 		return new ResponseEntity<>(userService.getUser(id).getEmail(), HttpStatus.OK);

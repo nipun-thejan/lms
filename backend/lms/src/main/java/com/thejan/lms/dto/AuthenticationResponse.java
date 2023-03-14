@@ -1,5 +1,6 @@
 package com.thejan.lms.dto;
 
+import com.thejan.lms.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 public class AuthenticationResponse {
     private String token;
-    private UserDetails user;
+    private String email;
+    private String name;
+    private Role role;
 }
 

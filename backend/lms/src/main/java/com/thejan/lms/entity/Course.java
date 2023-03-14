@@ -9,39 +9,34 @@ import lombok.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-@Getter
-@Setter
+@Data
 @Entity
 @NoArgsConstructor
-@Table(name = "course")
+@AllArgsConstructor
+@Builder
+//@EqualsAndHashCode(callSuper = true)
 public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(nullable = false)
+    private String name;
+
     @Column(unique = true, nullable = false)
     @JsonProperty("course_code")
     private String courseCode;
 
-    @Column(nullable = false)
-    private String name;
-
     @Column(length = 1000)
     private String description;
 
-    @ManyToOne
-    private Teacher teacher;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Teacher conductor;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "course")
     @JsonIgnore
-    public Set<StudentCourseRegistration> registrations = new HashSet<>();
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
+    private Set<StudentCourseRegistration> registrations;
 
 
 

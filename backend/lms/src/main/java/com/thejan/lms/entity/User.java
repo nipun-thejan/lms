@@ -18,8 +18,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EqualsAndHashCode()
 //@Inheritance(strategy = InheritanceType.JOINED)
-@Inheritance(strategy = InheritanceType.JOINED)
+//@Inheritance(strategy = InheritanceType.JOINED)
 public class User implements UserDetails {
 
     @Id

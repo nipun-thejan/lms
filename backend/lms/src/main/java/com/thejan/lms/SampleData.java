@@ -1,5 +1,6 @@
 package com.thejan.lms;
 
+import com.thejan.lms.entity.Course;
 import com.thejan.lms.entity.Role;
 import com.thejan.lms.service.AuthenticationService;
 import com.thejan.lms.service.CourseService;
@@ -15,8 +16,12 @@ public class SampleData {
     private final AuthenticationService authenticationService;
     private final CourseService courseService;
 
-
     @PostConstruct
+    private void start() throws Exception{
+        addSampleUser();
+        addSampleCourses();
+        enrollStudentsToCourses1();
+    }
     private void addSampleUser() throws Exception {
         authenticationService.register(
                 new RegisterRequest(
@@ -46,14 +51,27 @@ public class SampleData {
         );
     }
 
-    @PostConstruct
     private void addSampleCourses() throws Exception {
+        final String description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+        Course course1 = Course.builder()
+                .courseCode("CS 0001")
+                .name("OOP")
+                .description(description)
+                .build();
+        courseService.createNewCourse(course1, "teach@gmail.com");
+
+        Course course2 = Course.builder()
+                .courseCode("CS 0002")
+                .name("Algorithms")
+                .description(description)
+                .build();
+        courseService.createNewCourse(course2, "teach@gmail.com");
 
     }
-    @PostConstruct
-    private void enrollStudentsToCourses() throws Exception {
-//        courseService.enrollStudent(1, "nsadisha@gmail.com");
-//        courseService.enrollStudent(3, "nsadisha@gmail.com");
+
+    private void enrollStudentsToCourses1() throws Exception {
+        courseService.enrollStudent(1L, "thej@gmail.com");
+        courseService.enrollStudent(2L, "thej@gmail.com");
     }
 
 }

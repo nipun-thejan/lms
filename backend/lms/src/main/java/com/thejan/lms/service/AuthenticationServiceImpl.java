@@ -1,13 +1,10 @@
 package com.thejan.lms.service;
 
 import com.thejan.lms.dto.RegisterResponse;
-import com.thejan.lms.entity.Token;
-import com.thejan.lms.entity.User;
-import com.thejan.lms.entity.UserFactory;
+import com.thejan.lms.entity.*;
 import com.thejan.lms.exception.EmailAlreadyExistsException;
 import com.thejan.lms.exception.TokenNotFoundException;
-import com.thejan.lms.repository.TokenRepository;
-import com.thejan.lms.repository.UserRepository;
+import com.thejan.lms.repository.*;
 import com.thejan.lms.security.JwtService;
 import com.thejan.lms.dto.AuthenticationRequest;
 import com.thejan.lms.dto.AuthenticationResponse;
@@ -32,11 +29,17 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    private final StudentRepository studentRepository;
+    private final TeacherRepository teacherRepository;
+
+    private final AdminRepository adminRepository;
+
+
+
 
     @Override
     public RegisterResponse register(RegisterRequest request) throws Exception{
         try{
-            request.validateRegisterRequest();
             System.out.println(request.getFirstName());
 
             User user = User.builder()
@@ -47,7 +50,13 @@ public class AuthenticationServiceImpl implements AuthenticationService{
                     .role(request.getRole())
                     .build();
 
-            var savedUser = userRepository.save(userFactory.getInstance(user));
+            switch(request.getRole()) {
+                case STUDENT -> studentRepository.save((Student) userFactory.getInstance(user));
+                case TEACHER -> teacherRepository.save((Teacher) userFactory.getInstance(user));
+                case ADMIN -> adminRepository.save((Admin) userFactory.getInstance(user));
+            }
+
+//            var savedUser = userRepository.save(userFactory.getInstance(user));
 
 //            var jwtToken = jwtService.generateToken(user);
 
@@ -82,7 +91,9 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
             return AuthenticationResponse.builder()
                     .token(jwtToken)
-                    .user(user)
+                    .email(user.getEmail())
+                    .name(user.getFirstName()+" "+user.getLastName())
+                    .role(user.getRole())
                     .build();
 
         }catch(BadCredentialsException e) {
