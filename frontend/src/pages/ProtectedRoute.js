@@ -6,9 +6,12 @@ const ProtectedRoute = ({ children }) => {
 
  
 
-  // if (!user) {
-  //   return <Navigate to='/landing' />;
-  // }
+  if (!user) {
+    return <Navigate to='/landing' />;
+  }
+  if (user.role === 'ADMIN') {
+    
+  }
   return children;
 };
 

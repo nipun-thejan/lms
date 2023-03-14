@@ -4,6 +4,8 @@ import Wrapper from '../assets/wrappers/SearchContainer';
 import { useState, useMemo } from 'react';
 const SearchContainer = () => {
   const [localSearch, setLocalSearch] = useState('');
+  const [name, setName] = useState('');
+
   const {
     isLoading,
     search,
@@ -71,6 +73,12 @@ const SearchContainer = () => {
             handleChange={handleSearch}
             list={sortOptions}
           />
+          {/* <FormRow
+            type= "text"
+            name='name'
+            value={name}
+            handleChange={handleChange}
+          /> */}
           <button
             className='btn btn-block btn-danger'
             disabled={isLoading}

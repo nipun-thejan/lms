@@ -4,95 +4,99 @@ import Wrapper from '../assets/wrappers/LoginPage';
 import { useAppContext } from '../context/appContext';
 import { Link, useNavigate } from 'react-router-dom';
 import FormikRow from '../components/FormikRow';
-import { useFormik } from 'formik';
+import { ErrorMessage, Field, Form, Formik, useFormik } from 'formik';
 import * as Yup from 'yup'
+import localStorageService from '../service/LocalStorageService';
 
 
-const initialValues = {
-  email: '',
-  password: '',
-};
 
-const onSubmit = values => {
-  console.log('Form data', values)
-}
-
-const validationSchema = Yup.object({
-  email: Yup.string()
-    .email('Invalid email format')
-    .required('Required'),
-  password: Yup.string().required('Required')
-})
 
 const Login = () => {
-  const formikLogin = useFormik({
-    initialValues,
-    onSubmit,
-    validationSchema
-  })
+  const isSigned = localStorageService.isSigned();
+
   const navigate = useNavigate();
-  const { loginUser,user, isLoading, showAlert, displayAlert, setupUser } =
+  const { loginUser,user, isLoading, showAlert, token , setupUser} =
     useAppContext();
 
-  // const onSubmit = (e) => {
-  //   e.preventDefault();
-  //   const { email, password } = values;
-  //   if (!email || !password ) {
-  //     displayAlert();
-  //     return;
-  //   }
-  //   const currentUser = { email, password };
+    const initialValues = {
+      email: '',
+      password: '',
+    };
+    
+    const onSubmit = values => {
+      // console.log("login", values)
 
-  //   loginUser({
-  //     currentUser,
-  //     endPoint: '/auth/login',
-  //     alertText: 'Login Successful!',
-  //   });
+      loginUser(values)
+    
+    }
+    
+    const validationSchema = Yup.object({
+      email: Yup.string()
+        .email('Invalid email format')
+        .required('Required'),
+      password: Yup.string().required('Required')
+    })
+    
+  useEffect(() => {
+    if (isSigned) {
+      const localuser = {
+        name : localStorageService.getName(),
+        email: localStorageService.getEmail(),
+        role: localStorageService.getRole()
+      }
+      const localtoken = localStorageService.getToken()
+      // console.log(localuser)
+      setupUser(localuser, localtoken )
+    }
+  }, [])
 
-  // };
-
-  // useEffect(() => {
-  //   if (user) {
-  //     setTimeout(() => {
-  //       navigate('/');
-  //     }, 1000);
-  //   }
-  // }, [user, navigate]);
+  useEffect(() => {
+    if (user) {
+      setTimeout(() => {
+        navigate('/');
+      }, 1000);
+    }
+  }, [user, navigate]);
 
   return (
     <Wrapper className='full-page'>
-      <form className='form' onSubmit={formikLogin.handleSubmit}>
+      <Formik
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      validationSchema={validationSchema}
+      >
+        {
+          ({isSubmitting}) => (
+<Form className='form'>
         <Logo />
         <h3>Login</h3>
         {showAlert && <Alert />}
 
-        <FormikRow
-          type='email'
-          name='email'
-          value={formikLogin.values.email}
-          onChange={formikLogin.handleChange}
-          onBlur={formikLogin.handleBlur}
-          touch={formikLogin.touched.email}
-          err={formikLogin.errors.email}
-        />
-        {/* password input */}
-        <FormikRow
-          type='password'
-          name='password'
-          value={formikLogin.values.password}
-          onChange={formikLogin.handleChange}
-          onBlur={formikLogin.handleBlur}
-          touch={formikLogin.touched.password}
-          err={formikLogin.errors.password}
-        />
-        <button type='submit' className='btn btn-block' disabled={isLoading && !formikLogin.isValid}>
+        <div className='form-row'>
+            <label className='form-label' htmlFor="email">Email</label>
+            <Field  className='form-input' type="email" id="email" name="email" />
+            <ErrorMessage name="email" component="div" className="error" />
+          </div>
+          <div  className='form-row'>
+            <label className='form-label' htmlFor="password">Password</label>
+            <Field  className='form-input' type="password" id="password" name="password" />
+            <ErrorMessage name="password" component="div" className="error" />
+          </div>
+          
+        <button type='submit' className='btn btn-block' disabled={isLoading && isSubmitting}>
           login
         </button>
         <p>
         Not a member yet?   <Link to="/register"> register</Link>
         </p>
 
-      </form>
+      </Form>
+          )
+        }
+
+
+      </Formik>
+      
     </Wrapper>
   );
 };

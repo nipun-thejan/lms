@@ -5,9 +5,11 @@ import { Link } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 import { useAppContext } from '../context/appContext';
 import React from 'react';
+import localStorageService from '../service/LocalStorageService';
 
 const Landing = () => {
   const { user } = useAppContext();
+
   return (
     <React.Fragment>
       {user && <Navigate to='/' />}

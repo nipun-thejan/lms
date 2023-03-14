@@ -32,5 +32,8 @@ const Wrapper = styled.section`
     cursor: pointer;
     letter-spacing: var(--letterSpacing);
   }
+  .error{
+    color: var(--red-dark);
+  }
 `
 export default Wrapper

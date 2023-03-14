@@ -1,9 +1,21 @@
-import { links } from '../utils/links';
+import { admin_links, student_links, teacher_links } from '../utils/links';
 import { NavLink } from 'react-router-dom';
 import Wrapper from '../assets/wrappers/NavLinks';
 import NavlinkDropdown from './NavlinkDropdown';
+import { useAppContext } from '../context/appContext';
 
 const NavLinks = ({ toggleSidebar }) => {
+  const {user} = useAppContext();
+  const role = user.role
+  let links;
+  if (role === "STUDENT") {
+    links = student_links;
+  } else if (role === "TEACHER") {
+    links = teacher_links
+  } else if (role === "ADMIN") {
+    links = admin_links
+  }
+  
   return (
     <Wrapper>
       <div className='nav-links'>

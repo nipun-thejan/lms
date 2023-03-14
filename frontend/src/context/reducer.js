@@ -64,10 +64,9 @@ const reducer = (state, action) => {
       return {
           ...state,
           isLoading: false,
-          user: action.payload.user,
           showAlert: true,
           alertType: 'success',
-          alertText: 'User Created ! redirecting !!!',
+          alertText: 'User Created',
       }
   }
   if (action.type === REGISTER_USER_ERROR) {
@@ -76,7 +75,7 @@ const reducer = (state, action) => {
         isLoading: false,
         showAlert: true,
         alertType: 'danger',
-        alertText: action.payload.msg,
+        // alertText: action.payload.error,
       }
   }
 
@@ -115,9 +114,10 @@ const reducer = (state, action) => {
       ...state,
       isLoading: false,
       token: action.payload.token,
+      user: action.payload.user,
       showAlert: true,
       alertType: 'success',
-      alertText: action.payload.alertText,
+      alertText: "already loggede in",
     };
   }
   if (action.type === SETUP_USER_ERROR) {
@@ -126,7 +126,6 @@ const reducer = (state, action) => {
       isLoading: false,
       showAlert: true,
       alertType: 'danger',
-      alertText: action.payload.msg,
     };
   }
   if (action.type === TOGGLE_SIDEBAR) {
@@ -139,8 +138,19 @@ const reducer = (state, action) => {
     return {
       ...initialState,
       userLoading: false,
+      user: null,
+      token: ''
     };
   }
+  // if (action.type === LOGOUT_USER_ERROR) {
+  //   return {
+  //     ...initialState,
+  //     showAlert: true,
+  //     alertType: 'failed:',
+  //     alertText: "Logout failed",
+      
+  //   };
+  // }
   if (action.type === UPDATE_USER_BEGIN) {
     return { ...state, isLoading: true };
   }

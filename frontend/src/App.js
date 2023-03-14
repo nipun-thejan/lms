@@ -6,7 +6,9 @@ import {
   SharedLayout,
   Stats,
   AddJob,
-  AdminRegister
+  AdminRegister,
+  AddCourse,
+  AllCourse
 } from './pages/dashboard'
 
 
@@ -15,25 +17,22 @@ function App() {
     <>
     <BrowserRouter>
       <Routes>
-        <Route
-          path='/'
-          element={
-            <ProtectedRoute>
-              <SharedLayout />
-            </ProtectedRoute>
-          }
-        >
+        <Route path='/' element={<ProtectedRoute> <SharedLayout /></ProtectedRoute>}>
           <Route index element={<Stats />} />
-          <Route path='all' element={<AllJobs />} />
+          {/* <Route path='all' element={<AllJobs />} /> */}
           <Route path='add' element={<AddJob />} />
           <Route path='profile' element={<Profile />} />
           <Route path='/admin/register' element={<AdminRegister />} />
+          <Route path='add_course' element={<AddCourse />} />
+          <Route path='all_course' element={<AllCourse />} />
 
-        </Route>
+
+
+          </Route>
         <Route path='/register' element={<Register />} />
         <Route path='/landing' element={<Landing />} />
         <Route path='/login' element={<Login />} />
-        <Route path='*' element={<Error />} />
+        <Route path='/*' element={<Error />} />
       </Routes>
     </BrowserRouter>
     <title>LMS</title>
