@@ -23,7 +23,6 @@ import {
   CLEAR_VALUES,
   
 } from './actions';
-import authService from '../service/AuthService';
 import localStorageService from '../service/LocalStorageService';
 
 
