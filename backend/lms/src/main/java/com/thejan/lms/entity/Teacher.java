@@ -12,7 +12,7 @@ import java.util.Set;
 @Entity
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode()
+@EqualsAndHashCode(callSuper = false)
 //@PrimaryKeyJoinColumn(name = "teacherId")
 public class Teacher extends User {
 

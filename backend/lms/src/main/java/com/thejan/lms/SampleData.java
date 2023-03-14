@@ -18,11 +18,11 @@ public class SampleData {
 
     @PostConstruct
     private void start() throws Exception{
-        addSampleUser();
+        addSampleUsers();
         addSampleCourses();
-        enrollStudentsToCourses1();
+        sampleEnrollStudentsToCourses1();
     }
-    private void addSampleUser() throws Exception {
+    private void addSampleUsers() throws Exception {
         authenticationService.register(
                 new RegisterRequest(
                         "thej",
@@ -52,7 +52,7 @@ public class SampleData {
     }
 
     private void addSampleCourses() throws Exception {
-        final String description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+        final String description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.";
         Course course1 = Course.builder()
                 .courseCode("CS 0001")
                 .name("OOP")
@@ -69,7 +69,7 @@ public class SampleData {
 
     }
 
-    private void enrollStudentsToCourses1() throws Exception {
+    private void sampleEnrollStudentsToCourses1() throws Exception {
         courseService.enrollStudent(1L, "thej@gmail.com");
         courseService.enrollStudent(2L, "thej@gmail.com");
     }

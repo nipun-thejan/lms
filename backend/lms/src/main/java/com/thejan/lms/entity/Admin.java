@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode()
+@EqualsAndHashCode(callSuper = false)
 public class Admin extends User{
     public Admin(User user) {
         super(user);
