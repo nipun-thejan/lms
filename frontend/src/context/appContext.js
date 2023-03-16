@@ -21,9 +21,13 @@ import {
   UPDATE_USER_ERROR,
   HANDLE_CHANGE,
   CLEAR_VALUES,
-  
+  GET_JOBS_BEGIN,
+  GET_JOBS_SUCCESS,
+  GET_SEARCH_JOBS_SUCCESS
 } from './actions';
+
 import localStorageService from '../service/LocalStorageService';
+import courseService from '../service/CourseService';
 
 
 
@@ -45,13 +49,15 @@ const initialState = {
   totalJobs: 0,
   numOfPages: 1,
   page: 1,
+  courses: [],
   stats: {},
   monthlyApplications: [],
   search: '',
   searchStatus: 'all',
   searchType: 'all',
   sort: 'latest',
-  sortOptions: ['latest', 'oldest', 'a-z', 'z-a'], 
+  sortOptions: ['latest', 'oldest', 'a-z', 'z-a'],
+
 };
 
 
@@ -86,7 +92,7 @@ const AppProvider = ({ children }) => {
   // const addUserToLocalStorage = (token) => {
   //   localStorage.setItem('token', token)
   // }
-  
+
   // const removeUserFromLocalStorage = () => {
   //   localStorage.removeItem('token')
   // }
@@ -107,10 +113,10 @@ const AppProvider = ({ children }) => {
     dispatch({ type: REGISTER_USER_BEGIN })
     try {
       const response = await axios.post('/auth/register', currentUser)
-      dispatch({ type: REGISTER_USER_SUCCESS})
+      dispatch({ type: REGISTER_USER_SUCCESS })
     } catch (error) {
       console.log(error.response.data)
-      dispatch({ 
+      dispatch({
         type: REGISTER_USER_ERROR,
       })
     }
@@ -121,23 +127,21 @@ const AppProvider = ({ children }) => {
     dispatch({ type: LOGIN_USER_BEGIN })
     try {
       const response = await axios.post('/auth/login', currentUser)
-      // const { token } = response.headers;
-      console.log(response)
-      const {name, token, email, role} = response.data
-      localStorageService.setToken(token)
-      localStorageService.setName(name)
-      localStorageService.setRole(role)
-      localStorageService.setEmail(email)
+      const { firstName, lastName, token, email, role } = response.data
 
       const user = {
-        name: name,
+        firstName: firstName,
+        lastName: lastName,
         email: email,
         role: role,
       }
+      localStorageService.setToken(token)
+      localStorageService.setRole(role)
+      localStorageService.setEmail(email)
       // console.log(user)
       dispatch({
         type: LOGIN_USER_SUCCESS,
-        payload: {token, user},
+        payload: { token, user },
       })
     } catch (error) {
       console.log(error);
@@ -150,14 +154,16 @@ const AppProvider = ({ children }) => {
   }
 
 
-  const setupUser = async ( user, token ) => {
+  const setupUser = async (user, token) => {
     // dispatch({ type: SETUP_USER_BEGIN });
     dispatch({
       type: LOGIN_USER_SUCCESS,
-      payload: {token, user},
+      payload: { token, user },
     })
     clearAlert()
   };
+
+
   const toggleSidebar = () => {
     dispatch({ type: TOGGLE_SIDEBAR });
   };
@@ -185,16 +191,17 @@ const AppProvider = ({ children }) => {
   //   }
   //   clearAlert();
   // };
-  
+
 
   const logoutUser = async (token) => {
     try {
       axios.post('/auth/logout', {}, {
         headers: {
-            Authorization: `Bearer ${token}`
-        }})
-        localStorageService.clearAll();
-        dispatch({ type: LOGOUT_USER})
+          Authorization: `Bearer ${token}`
+        }
+      })
+      localStorageService.clearAll();
+      dispatch({ type: LOGOUT_USER })
 
     } catch (error) {
       console.log(error)
@@ -251,10 +258,34 @@ const AppProvider = ({ children }) => {
     // clearAlert();
   };
 
-  const getJobs = async () => {
+  const getJobs = async (courses) => {
+    dispatch({ type: GET_JOBS_BEGIN });
+
+    dispatch({
+      type: GET_JOBS_SUCCESS,
+      payload: { courses },
+    })
+    clearAlert();
+  };
+
+  // const getSearchCourses = async (query) => {
+  //   dispatch({ type: GET_JOBS_BEGIN });
+  //   try {
+  //     const courses = courseService.search(query)
+  //     // store sourse
+  //     dispatch({
+  //       type: GET_SEARCH_JOBS_SUCCESS,
+  //       payload: { courses }
+  //     })
+  //   }
+  //   catch (error) {
+  //     console.log(error)
+  //   }
+  // };
+  const getCourses = async () => {
     // const { page, search, searchStatus, searchType, sort } = state;
 
-    // let url = `/jobs?page=${page}&status=${searchStatus}&jobType=${searchType}&sort=${sort}`;
+    // let url = `/course?page=${page}&status=${searchStatus}&jobType=${searchType}&sort=${sort}`;
     // if (search) {
     //   url = url + `&search=${search}`;
     // }
@@ -274,7 +305,8 @@ const AppProvider = ({ children }) => {
     //   logoutUser();
     // }
     // clearAlert();
-  };
+
+  }
 
   const setEditJob = (id) => {
     // dispatch({ type: SET_EDIT_JOB, payload: { id } });
@@ -378,7 +410,7 @@ const AppProvider = ({ children }) => {
         clearFilters,
         changePage,
         loginUser,
-        registerUser
+        registerUser,
       }}
     >
       {children}

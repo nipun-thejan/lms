@@ -3,14 +3,6 @@ class LocalStorageService {
     #TOKEN_KEY = 'token';
     #EMAIL_KEY = 'email';
     #ROLE_KEY = 'role';
-    #NAME_KEY = 'name';
-
-    setName(name) {
-        localStorage.setItem(this.#NAME_KEY, name);
-    }
-    getName() { 
-        return localStorage.getItem(this.#NAME_KEY) || null;
-    }
 
     setToken(token) {
         localStorage.setItem(this.#TOKEN_KEY, token);
@@ -22,7 +14,6 @@ class LocalStorageService {
         localStorage.removeItem(this.#TOKEN_KEY);
         localStorage.removeItem(this.#EMAIL_KEY);
         localStorage.removeItem(this.#ROLE_KEY);
-        localStorage.removeItem(this.#NAME_KEY)
     }
 
     isSigned() {

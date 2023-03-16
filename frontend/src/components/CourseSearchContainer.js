@@ -1,61 +1,59 @@
 import { FormRow, FormRowSelect } from '.';
 import { useAppContext } from '../context/appContext';
 import Wrapper from '../assets/wrappers/SearchContainer';
-import { useState, useMemo } from 'react';
-const SearchContainer = () => {
-  const [localSearch, setLocalSearch] = useState('');
+import { useState, useMemo, useEffect, useCallback } from 'react';
+import courseService from '../service/CourseService';
+import { useSearchParams } from 'react-router-dom';
+
+const CourseSearchContainer = () => {
   const {
-    isLoading,
-    searchStatus,
-    searchType,
-    sort,
-    sortOptions,
-    handleChange,
-    clearFilters,
-    jobTypeOptions,
-    statusOptions,
+    getJobs,
   } = useAppContext();
+
+  const [params, setParams] = useSearchParams();
+  const [query, setQuery] = useState("");
+
+  const search = useCallback((query) => {
+    courseService.search(query)
+      .then(res => {
+        getJobs(res)
+      }).catch(err => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    setQuery(params.get('query') || "");
+    search(params.get('query') || "");
+  }, [search, params]);
+
   const handleSearch = (e) => {
-    handleChange({ name: e.target.name, value: e.target.value });
-  };
-  const handleSubmit = (e) => {
     e.preventDefault();
-    setLocalSearch('');
-    clearFilters();
-  };
-  const debounce = () => {
-    let timeoutID;
-    return (e) => {
-      setLocalSearch(e.target.value);
-      clearTimeout(timeoutID);
-      timeoutID = setTimeout(() => {
-        handleChange({ name: e.target.name, value: e.target.value });
-      }, 1000);
-    };
-  };
-  const optimizedDebounce = useMemo(() => debounce(), []);
+
+    setParams(`?query=${query}`);
+    search(query);
+  }
+
+
   return (
     <Wrapper>
-      <form className='form'>
+      <form className='form' onSubmit={handleSearch}>
         <h4>search form</h4>
         <div className='form-center'>
-          {/* search position */}
 
           <FormRow
             type='text'
-            name='search'
-            value={localSearch}
-            handleChange={optimizedDebounce}
+            name='query'
+            value={query}
+            handleChange={(e) => setQuery(e.target.value)}
           />
-          {/* search by status */}
-          <FormRowSelect
+          {/* <FormRowSelect
             labelText='status'
             name='searchStatus'
             value={searchStatus}
             handleChange={handleSearch}
             list={['all', ...statusOptions]}
           />
-          {/* search by type */}
           <FormRowSelect
             labelText='type'
             name='searchType'
@@ -63,13 +61,12 @@ const SearchContainer = () => {
             handleChange={handleSearch}
             list={['all', ...jobTypeOptions]}
           />
-          {/* sort */}
           <FormRowSelect
             name='sort'
             value={sort}
             handleChange={handleSearch}
             list={sortOptions}
-          />
+          /> */}
           {/* <FormRow
             type= "text"
             name='name'
@@ -78,10 +75,10 @@ const SearchContainer = () => {
           /> */}
           <button
             className='btn btn-block btn-danger'
-            disabled={isLoading}
-            onClick={handleSubmit}
+            // disabled={isLoading}
+            type='submit'
           >
-            clear filters
+            submit
           </button>
         </div>
       </form>
@@ -89,4 +86,4 @@ const SearchContainer = () => {
   );
 };
 
-export default SearchContainer;
+export default CourseSearchContainer;

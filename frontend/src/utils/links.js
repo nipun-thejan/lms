@@ -29,19 +29,16 @@ const admin_links = [
 const teacher_links = [
   { id: 1, text: 'Home', path: '/', icon: <IoBarChartSharp /> },
   { id: 2, text: 'profile', path: 'profile', icon: <ImProfile /> },
-  // { id: 3, text: 'add course', path: 'add-job', icon: <FaWpforms /> },
-  // { id: 4, text: 'profile', path: 'profile', icon: <ImProfile /> },
-  { id: 5, text: 'all course', path: 'all_course', icon: <FaWpforms /> },
-
+  { id: 3, text: 'all course', path: 'all_course', icon: <FaWpforms /> },
+  { id: 4, text: 'add course', path: 'add_course', icon: <FaWpforms /> },
 
 ]
 
 const student_links = [
   { id: 1, text: 'Home', path: '/', icon: <IoBarChartSharp /> },
-  { id: 2, text: 'profile', path: 'profile', icon: <ImProfile /> }, 
-  //  { id: 3, text: 'add course', path: 'add-job', icon: <FaWpforms /> },
-  { id: 4, text: 'add course', path: 'add_course', icon: <FaWpforms /> },
-  { id: 5, text: 'all course', path: 'all_course', icon: <FaWpforms /> },
+  { id: 2, text: 'profile', path: 'profile', icon: <ImProfile /> },
+  // { id: 3, text: 'add course', path: 'add_course', icon: <FaWpforms /> },
+  { id: 3, text: 'all course', path: 'all_course', icon: <FaWpforms /> },
 
 ]
-export { admin_links, student_links, teacher_links}
+export { admin_links, student_links, teacher_links }

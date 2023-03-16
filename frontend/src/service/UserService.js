@@ -2,9 +2,9 @@ import axios from "axios";
 
 class UserService {
     async getCurrentUserInfo(token) {
-        return axios.get('/user/info', {
+        return axios.get('/user/userInfo', {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `${token}`
             }
         }).then(res => {
             return res.data;

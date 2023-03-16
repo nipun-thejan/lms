@@ -6,17 +6,20 @@ const Profile = () => {
   const { user, showAlert, displayAlert, updateUser, isLoading } =
     useAppContext()
 
-  const [name, setName] = useState(user?.name)
+  const [firstName, setFirstName] = useState(user?.firstName)
+  const [lastName, setLastName] = useState(user?.lastName)
   const [email, setEmail] = useState(user?.email)
   const [role, setRole] = useState(user?.role)
 
+  console.log(user)
+
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (!name || !email || !role ) {
+    if (!firstName || !email || !role || !lastName) {
       displayAlert()
       return
     }
-    updateUser({ name, email, role })
+    updateUser({ firstName, lastName, email, role })
   }
 
   return (
@@ -27,22 +30,30 @@ const Profile = () => {
         <div className='form-center'>
           <FormRow
             type='text'
-            name='name'
-            value={name}
-            handleChange={(e) => setName(e.target.value)}
+            name='first name'
+            value={firstName}
+          // handleChange={(e) => setFirstName(e.target.value)}
           />
+          <FormRow
+            type='text'
+            name='last name'
+            value={lastName}
+          // handleChange={(e) => setLastName(e.target.value)}
+          />
+
           <FormRow
             type='text'
             labelText='role'
             name='role'
             value={role}
-            handleChange={(e) => setRole(e.target.value)}
+          // handleChange={(e) => setRole(e.target.value)}
           />
           <FormRow
             type='email'
             name='email'
             value={email}
-            handleChange={(e) => setEmail(e.target.value)}
+            // handleChange={(e) => setEmail(e.target.value)}
+            disabled
           />
           {/* <FormRow
             type='text'

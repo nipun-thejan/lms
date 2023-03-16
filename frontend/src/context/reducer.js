@@ -17,24 +17,28 @@ import {
   UPDATE_USER_ERROR,
   HANDLE_CHANGE,
   CLEAR_VALUES,
+  GET_JOBS_BEGIN,
+  GET_JOBS_SUCCESS,
+  GET_SEARCH_JOBS_SUCCESS,
+
 } from './actions';
- // CREATE_JOB_BEGIN,
-  // CREATE_JOB_SUCCESS,
-  // CREATE_JOB_ERROR,
-  // GET_JOBS_BEGIN,
-  // GET_JOBS_SUCCESS,
-  // SET_EDIT_JOB,
-  // DELETE_JOB_BEGIN,
-  // DELETE_JOB_ERROR,
-  // EDIT_JOB_BEGIN,
-  // EDIT_JOB_SUCCESS,
-  // EDIT_JOB_ERROR,
-  // SHOW_STATS_BEGIN,
-  // SHOW_STATS_SUCCESS,
-  // CLEAR_FILTERS,
-  // CHANGE_PAGE,
-  // GET_CURRENT_USER_BEGIN,
-  // GET_CURRENT_USER_SUCCESS,
+// CREATE_JOB_BEGIN,
+// CREATE_JOB_SUCCESS,
+// CREATE_JOB_ERROR,
+// GET_JOBS_BEGIN,
+// GET_JOBS_SUCCESS,
+// SET_EDIT_JOB,
+// DELETE_JOB_BEGIN,
+// DELETE_JOB_ERROR,
+// EDIT_JOB_BEGIN,
+// EDIT_JOB_SUCCESS,
+// EDIT_JOB_ERROR,
+// SHOW_STATS_BEGIN,
+// SHOW_STATS_SUCCESS,
+// CLEAR_FILTERS,
+// CHANGE_PAGE,
+// GET_CURRENT_USER_BEGIN,
+// GET_CURRENT_USER_SUCCESS,
 import { initialState } from './appContext';
 
 const reducer = (state, action) => {
@@ -56,27 +60,27 @@ const reducer = (state, action) => {
   }
   if (action.type === REGISTER_USER_BEGIN) {
     return {
-        ...state,
-        isLoading: true,
+      ...state,
+      isLoading: true,
     }
   }
   if (action.type === REGISTER_USER_SUCCESS) {
-      return {
-          ...state,
-          isLoading: false,
-          showAlert: true,
-          alertType: 'success',
-          alertText: 'User Created',
-      }
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: 'success',
+      alertText: 'User Created',
+    }
   }
   if (action.type === REGISTER_USER_ERROR) {
-      return {
-        ...state,
-        isLoading: false,
-        showAlert: true,
-        alertType: 'danger',
-        // alertText: action.payload.error,
-      }
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: 'danger',
+      // alertText: action.payload.error,
+    }
   }
 
   if (action.type === LOGIN_USER_BEGIN) {
@@ -148,7 +152,7 @@ const reducer = (state, action) => {
   //     showAlert: true,
   //     alertType: 'failed:',
   //     alertText: "Logout failed",
-      
+
   //   };
   // }
   if (action.type === UPDATE_USER_BEGIN) {
@@ -199,19 +203,6 @@ const reducer = (state, action) => {
     };
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
   // if (action.type === CREATE_JOB_BEGIN) {
   //   return { ...state, isLoading: true };
   // }
@@ -234,18 +225,24 @@ const reducer = (state, action) => {
   //     alertText: action.payload.msg,
   //   };
   // }
-  // if (action.type === GET_JOBS_BEGIN) {
-  //   return { ...state, isLoading: true, showAlert: false };
-  // }
-  // if (action.type === GET_JOBS_SUCCESS) {
-  //   return {
-  //     ...state,
-  //     isLoading: false,
-  //     jobs: action.payload.jobs,
-  //     totalJobs: action.payload.totalJobs,
-  //     numOfPages: action.payload.numOfPages,
-  //   };
-  // }
+  if (action.type === GET_JOBS_BEGIN) {
+    return { ...state, isLoading: true, showAlert: false };
+  }
+  if (action.type === GET_JOBS_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      courses: action.payload.courses,
+    };
+  }
+  if (action.type === GET_SEARCH_JOBS_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      courses: action.payload.courses,
+    };
+  }
+
   // if (action.type === SET_EDIT_JOB) {
   //   const job = state.jobs.find((job) => job._id === action.payload.id);
   //   const { _id, position, company, jobLocation, jobType, status } = job;
@@ -361,7 +358,7 @@ const reducer = (state, action) => {
 
 
 
-  
+
   throw new Error(`no such action : ${action.type}`);
 };
 
