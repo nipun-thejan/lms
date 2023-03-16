@@ -1,43 +1,62 @@
 import { useState, useEffect } from 'react';
 import { Logo, FormRow, Alert } from '../components';
-import Wrapper from '../assets/wrappers/RegisterPage';
+import Wrapper from '../assets/wrappers/LoginPage';
 import { useAppContext } from '../context/appContext';
-import { useNavigate } from 'react-router-dom';
-const initialState = {
-  name: '',
-  email: '',
-  password: '',
-};
+import { Link, useNavigate } from 'react-router-dom';
+import FormikRow from '../components/FormikRow';
+import { ErrorMessage, Field, Form, Formik, useFormik } from 'formik';
+import * as Yup from 'yup'
+import localStorageService from '../service/LocalStorageService';
+import userService from '../service/UserService';
+
+
+
 
 const Login = () => {
+  const isSigned = localStorageService.isSigned();
+
   const navigate = useNavigate();
-  const [values, setValues] = useState(initialState);
-  const { loginUser,user, isLoading, showAlert, displayAlert, setupUser } =
+  const { loginUser, user, isLoading, showAlert, token, setupUser } =
     useAppContext();
 
-  // const toggleMember = () => {
-  //   setValues({ ...values, isMember: !values.isMember });
-  // };
-
-  const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
+  const initialValues = {
+    email: '',
+    password: '',
   };
-  const onSubmit = (e) => {
-    e.preventDefault();
-    const { email, password } = values;
-    if (!email || !password ) {
-      displayAlert();
-      return;
+
+  const onSubmit = values => {
+    // console.log("login", values)
+
+    loginUser(values)
+
+  }
+
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .email('Invalid email format')
+      .required('Required'),
+    password: Yup.string().required('Required')
+  })
+
+  useEffect(() => {
+    if (isSigned) {
+      const localtoken = localStorageService.getToken()
+      userService.getCurrentUserInfo(localtoken).then(res => {
+        const { firstName, lastName, role, email } = res;
+        const localuser = {
+          firstName,
+          lastName,
+          role,
+          email
+        }
+        setupUser(localuser, localtoken)
+        console.log("is signed", localuser)
+
+      }).catch(err => {
+        console.log(err)
+      })
     }
-    const currentUser = { email, password };
-
-    loginUser({
-      currentUser,
-      endPoint: '/auth/login',
-      alertText: 'Login Successful!',
-    });
-
-  };
+  }, [])
 
   useEffect(() => {
     if (user) {
@@ -49,29 +68,43 @@ const Login = () => {
 
   return (
     <Wrapper className='full-page'>
-      <form className='form' onSubmit={onSubmit}>
-        <Logo />
-        <h3>Login</h3>
-        {showAlert && <Alert />}
+      <Formik
+        initialValues={initialValues}
+        onSubmit={onSubmit}
+        validationSchema={validationSchema}
+      >
+        {
+          ({ isSubmitting }) => (
+            <Form className='form'>
+              <Logo />
+              <h3>Login</h3>
+              {showAlert && <Alert />}
 
-        <FormRow
-          type='email'
-          name='email'
-          value={values.email}
-          handleChange={handleChange}
-        />
-        {/* password input */}
-        <FormRow
-          type='password'
-          name='password'
-          value={values.password}
-          handleChange={handleChange}
-        />
-        <button type='submit' className='btn btn-block' disabled={isLoading}>
-          submit
-        </button>
+              <div className='form-row'>
+                <label className='form-label' htmlFor="email">Email</label>
+                <Field className='form-input' type="email" id="email" name="email" />
+                <ErrorMessage name="email" component="div" className="error" />
+              </div>
+              <div className='form-row'>
+                <label className='form-label' htmlFor="password">Password</label>
+                <Field className='form-input' type="password" id="password" name="password" />
+                <ErrorMessage name="password" component="div" className="error" />
+              </div>
 
-      </form>
+              <button type='submit' className='btn btn-block' disabled={isLoading && isSubmitting}>
+                login
+              </button>
+              <p>
+                Not a member yet?   <Link to="/register"> register</Link>
+              </p>
+
+            </Form>
+          )
+        }
+
+
+      </Formik>
+
     </Wrapper>
   );
 };

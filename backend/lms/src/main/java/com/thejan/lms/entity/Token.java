@@ -2,16 +2,14 @@ package com.thejan.lms.entity;
 
 import com.thejan.lms.security.SecurityConstants;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EqualsAndHashCode
 public class Token {
 
     @Id
@@ -27,7 +25,7 @@ public class Token {
 
     public boolean expired;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     public User user;
 }

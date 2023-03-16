@@ -11,7 +11,7 @@ const Wrapper = styled.section`
   .form {
     max-width: 500px;
     border-top: 5px solid var(--primary-500);
-    height: 60vh;
+    /* height: 90vh; */
   }
 
   h3 {
@@ -31,6 +31,9 @@ const Wrapper = styled.section`
     color: var(--primary-500);
     cursor: pointer;
     letter-spacing: var(--letterSpacing);
+  }
+  .error{
+    color: var(--red-dark);
   }
 `
 export default Wrapper

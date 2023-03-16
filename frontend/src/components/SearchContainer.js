@@ -6,7 +6,6 @@ const SearchContainer = () => {
   const [localSearch, setLocalSearch] = useState('');
   const {
     isLoading,
-    search,
     searchStatus,
     searchType,
     sort,
@@ -71,6 +70,12 @@ const SearchContainer = () => {
             handleChange={handleSearch}
             list={sortOptions}
           />
+          {/* <FormRow
+            type= "text"
+            name='name'
+            value={name}
+            handleChange={handleChange}
+          /> */}
           <button
             className='btn btn-block btn-danger'
             disabled={isLoading}

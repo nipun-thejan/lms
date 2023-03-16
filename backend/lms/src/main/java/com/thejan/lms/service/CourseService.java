@@ -23,7 +23,7 @@ public interface CourseService {
 
     List<Student> getEnrolledStudents(Long id) throws Exception;
 
-    Course createNewCourse(Course course, String name) throws CourseCreationFailureException, Exception;
+    Course createNewCourse(Course course, String email) throws CourseCreationFailureException, Exception;
 
     Object enrollStudent(Long courseId, String email) throws CourseEnrollmentFailedException, Exception;
 

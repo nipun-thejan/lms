@@ -1,5 +1,6 @@
 package com.thejan.lms;
 
+import com.thejan.lms.entity.Course;
 import com.thejan.lms.entity.Role;
 import com.thejan.lms.service.AuthenticationService;
 import com.thejan.lms.service.CourseService;
@@ -10,14 +11,18 @@ import org.springframework.stereotype.Component;
 
 
 @RequiredArgsConstructor
-@Component
+//@Component
 public class SampleData {
     private final AuthenticationService authenticationService;
     private final CourseService courseService;
 
-
     @PostConstruct
-    private void addSampleUser() throws Exception {
+    private void start() throws Exception{
+        addSampleUsers();
+        addSampleCourses();
+        sampleEnrollStudentsToCourses1();
+    }
+    private void addSampleUsers() throws Exception {
         authenticationService.register(
                 new RegisterRequest(
                         "thej",
@@ -46,14 +51,27 @@ public class SampleData {
         );
     }
 
-    @PostConstruct
     private void addSampleCourses() throws Exception {
+        final String description = "Lorem Ipsum is simply dummy book.";
+        Course course1 = Course.builder()
+                .courseCode("CS 0001")
+                .name("OOP")
+                .description(description)
+                .build();
+        courseService.createNewCourse(course1, "teach@gmail.com");
+
+        Course course2 = Course.builder()
+                .courseCode("CS 0002")
+                .name("Algorithms")
+                .description(description)
+                .build();
+        courseService.createNewCourse(course2, "teach@gmail.com");
 
     }
-    @PostConstruct
-    private void enrollStudentsToCourses() throws Exception {
-//        courseService.enrollStudent(1, "nsadisha@gmail.com");
-//        courseService.enrollStudent(3, "nsadisha@gmail.com");
+
+    private void sampleEnrollStudentsToCourses1() throws Exception {
+        courseService.enrollStudent(1L, "thej@gmail.com");
+        courseService.enrollStudent(2L, "thej@gmail.com");
     }
 
 }

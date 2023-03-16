@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 //@Inheritance(strategy = InheritanceType.JOINED)
-@Inheritance(strategy = InheritanceType.JOINED)
+//@Inheritance(strategy = InheritanceType.JOINED)
 public class User implements UserDetails {
 
     @Id
@@ -89,16 +89,4 @@ public class User implements UserDetails {
 		return true;
 	}
 
-
-	@Override
-	public String toString() {
-		return "User{" +
-				"id=" + id +
-				", email='" + email + '\'' +
-				", password='" + password + '\'' +
-				", firstName='" + firstName + '\'' +
-				", lastName='" + lastName + '\'' +
-				", role=" + role +
-				'}';
-	}
 }

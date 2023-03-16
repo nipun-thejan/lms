@@ -8,43 +8,48 @@ import lombok.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
-@Getter
-@Setter
+@Data
 @Entity
 @NoArgsConstructor
-@Table(name = "course")
+@AllArgsConstructor
+@Builder
 public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(nullable = false)
+    private String name;
+
     @Column(unique = true, nullable = false)
     @JsonProperty("course_code")
     private String courseCode;
 
-    @Column(nullable = false)
-    private String name;
-
     @Column(length = 1000)
     private String description;
 
-    @ManyToOne
-    private Teacher teacher;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Teacher conductor;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "course")
     @JsonIgnore
-    public Set<StudentCourseRegistration> registrations = new HashSet<>();
+    private Set<StudentCourseRegistration> registrations;
 
     @Override
     public int hashCode() {
         return super.hashCode();
     }
 
-
-
-
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return id == course.id && Objects.equals(name, course.name) && Objects.equals(courseCode, course.courseCode) && Objects.equals(description, course.description) && Objects.equals(conductor, course.conductor) && Objects.equals(registrations, course.registrations);
+    }
 }
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)

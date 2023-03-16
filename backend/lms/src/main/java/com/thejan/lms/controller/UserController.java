@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("api/v1/user")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
+
+
 
 	@GetMapping("/{id}")
 	public ResponseEntity<String> findById(@PathVariable Long id) {

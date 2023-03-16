@@ -61,7 +61,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Object search(String query) {
+    public List<Course> search(String query) {
         return courseRepository.findCoursesByNameContainingIgnoreCase(query);
     }
 
@@ -75,7 +75,7 @@ public class CourseServiceImpl implements CourseService {
     public Course createNewCourse(Course course, String email) throws Exception {
         try {
             Teacher teacher = teacherService.getTeacher(email);
-            course.setTeacher(teacher);
+            course.setConductor(teacher);
             teacher.getConductingCourses().add(course);
             return courseRepository.save(course);
         } catch(DataIntegrityViolationException e) {
@@ -96,8 +96,8 @@ public class CourseServiceImpl implements CourseService {
                     .course(course)
                     .registrationDate(LocalDateTime.now())
                     .build();
-            student.getRegistrations().add(registration);
             course.getRegistrations().add(registration);
+            student.getRegistrations().add(registration);
             return studentCourseRegisterService.save(registration);
         }catch(DataIntegrityViolationException e) {
             throw new CourseEnrollmentFailedException("You have already enrolled in this course.");

@@ -1,6 +1,6 @@
 package com.thejan.lms.exception;
 
-public class CourseEnrollmentFailedException extends Exception
+public class CourseEnrollmentFailedException extends RuntimeException
 {
     public CourseEnrollmentFailedException(String message) {
         super(message);

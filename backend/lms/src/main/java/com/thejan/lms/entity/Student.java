@@ -10,20 +10,14 @@ import java.util.Set;
 
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Entity
-@Table(name = "student")
-//@PrimaryKeyJoinColumn(name = "studentId")
 public class Student extends User{
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long studentId;
-    private String major;
+//    private String major;
 
     public Student(User user) {
         super(user);
-        major="comp";
     }
 
 //    @JsonIgnore
@@ -38,7 +32,13 @@ public class Student extends User{
 //        inverseJoinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id")
 //    )
 //    private Set<Course> courses;
-    @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
     @JsonIgnore
-    private Set<StudentCourseRegistration> registrations = new HashSet<>();
+    private Set<StudentCourseRegistration> registrations;
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
 }

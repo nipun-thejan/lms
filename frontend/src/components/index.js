@@ -1,5 +1,5 @@
 import Alert from './Alert'
-import BigSidebar from './BigSidebar'
+import BigSidebar from './sidebar/BigSidebar'
 import ChartsContainer from './ChartsContainer'
 import FormRow from './FormRow'
 import FormRowSelect from './FormRowSelect'
@@ -8,7 +8,7 @@ import Loading from './Loading'
 import Logo from './Logo'
 import Navbar from './Navbar'
 import SearchContainer from './SearchContainer'
-import SmallSidebar from './SmallSidebar'
+import SmallSidebar from './sidebar/SmallSidebar'
 import CardContainer from './CardContainer'
 export {
   Logo,

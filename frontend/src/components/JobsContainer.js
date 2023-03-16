@@ -5,6 +5,7 @@ import Job from './Job';
 import Alert from './Alert';
 import Wrapper from '../assets/wrappers/JobsContainer';
 import PageBtnContainer from './PageBtnContainer';
+import { Stats } from '../pages/dashboard';
 
 const JobsContainer = () => {
   const {
@@ -48,6 +49,7 @@ const JobsContainer = () => {
         })}
       </div>
       {numOfPages > 1 && <PageBtnContainer />}
+      {/* <Stats/> */}
     </Wrapper>
   );
 };

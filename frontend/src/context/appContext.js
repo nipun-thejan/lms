@@ -21,8 +21,13 @@ import {
   UPDATE_USER_ERROR,
   HANDLE_CHANGE,
   CLEAR_VALUES,
-  
+  GET_JOBS_BEGIN,
+  GET_JOBS_SUCCESS,
+  GET_SEARCH_JOBS_SUCCESS
 } from './actions';
+
+import localStorageService from '../service/LocalStorageService';
+import courseService from '../service/CourseService';
 
 
 
@@ -33,24 +38,26 @@ const initialState = {
   alertText: '',
   alertType: '',
   user: null,
+  token: '',
   showSidebar: false,
   isEditing: false,
   jobTypeOptions: ['full-time', 'part-time', 'remote'],
   jobType: 'full-time',
-  statusOptions: ['permanent', 'retired'],
+  statusOptions: ['expired', 'ongoing', 'cancelled'],
   status: 'pending',
   jobs: [],
   totalJobs: 0,
   numOfPages: 1,
   page: 1,
+  courses: [],
   stats: {},
   monthlyApplications: [],
   search: '',
   searchStatus: 'all',
   searchType: 'all',
   sort: 'latest',
-  token: '',
-  sortOptions: ['latest', 'oldest', 'a-z', 'z-a'], 
+  sortOptions: ['latest', 'oldest', 'a-z', 'z-a'],
+
 };
 
 
@@ -62,33 +69,33 @@ const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // axios
-  const authFetch = axios.create({
-    baseURL: '/api/v1',
-  });
-  // request
+  // const authFetch = axios.create({
+  //   baseURL: '/api/v1',
+  // });
+  // // request
 
-  // response
+  // // response
 
-  authFetch.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    (error) => {
-      // console.log(error.response)
-      if (error.response.status === 401) {
-        logoutUser();
-      }
-      return Promise.reject(error);
-    }
-  );
+  // authFetch.interceptors.response.use(
+  //   (response) => {
+  //     return response;
+  //   },
+  //   (error) => {
+  //     // console.log(error.response)
+  //     if (error.response.status === 401) {
+  //       logoutUser();
+  //     }
+  //     return Promise.reject(error);
+  //   }
+  // );
 
-  const addUserToLocalStorage = (token) => {
-    localStorage.setItem('token', token)
-  }
-  
-  const removeUserFromLocalStorage = () => {
-    localStorage.removeItem('token')
-  }
+  // const addUserToLocalStorage = (token) => {
+  //   localStorage.setItem('token', token)
+  // }
+
+  // const removeUserFromLocalStorage = () => {
+  //   localStorage.removeItem('token')
+  // }
 
   const displayAlert = () => {
     dispatch({ type: DISPLAY_ALERT });
@@ -98,89 +105,65 @@ const AppProvider = ({ children }) => {
   const clearAlert = () => {
     setTimeout(() => {
       dispatch({ type: CLEAR_ALERT });
-    }, 3000);
+    }, 2000);
   };
 
-  const registerUser = async ({ currentUser, endPoint, alertText }) => {
+  const registerUser = async (currentUser) => {
+    console.log("reg function", currentUser)
     dispatch({ type: REGISTER_USER_BEGIN })
     try {
-      const response = await axios.post( `${endPoint}`,
-      currentUser)
-      console.log(response)
-      const {user} = currentUser.email
-      dispatch({
-        type: REGISTER_USER_SUCCESS,
-        payload: {
-          user
-        },
-      })
-  
-      // will add later
-      // addUserToLocalStorage({
-      //   user,
-      //   token,
-      //   location,
-      // })
+      const response = await axios.post('/auth/register', currentUser)
+      dispatch({ type: REGISTER_USER_SUCCESS })
     } catch (error) {
-      console.log(error.response)
+      console.log(error.response.data)
       dispatch({
         type: REGISTER_USER_ERROR,
-        payload: { msg: error.response },
       })
     }
     clearAlert()
   }
 
-  const loginUser = async ({ currentUser, endPoint, alertText }) => {
+  const loginUser = async (currentUser) => {
     dispatch({ type: LOGIN_USER_BEGIN })
     try {
-      const response = await axios.post(
-        `${endPoint}`,
-        currentUser)
-      // const { token } = response.headers;
-      const token = "token"
-      const user = currentUser.email
-      console.log(user)
+      const response = await axios.post('/auth/login', currentUser)
+      const { firstName, lastName, token, email, role } = response.data
 
-      console.log(response.headers)
-  
+      const user = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        role: role,
+      }
+      localStorageService.setToken(token)
+      localStorageService.setRole(role)
+      localStorageService.setEmail(email)
+      // console.log(user)
       dispatch({
         type: LOGIN_USER_SUCCESS,
-        payload: {token, user},
+        payload: { token, user },
       })
-  
-      addUserToLocalStorage(token)
-
     } catch (error) {
+      console.log(error);
       dispatch({
         type: LOGIN_USER_ERROR,
-        payload: { msg: error.response },
+        payload: { msg: error.response.message }
       })
     }
     clearAlert()
   }
 
 
-  const setupUser = async ({ currentUser, endPoint, alertText }) => {
-    dispatch({ type: SETUP_USER_BEGIN });
-    try {
-      const { data } = await axios.post(
-        `${endPoint}`,
-        currentUser
-      );
-
-      dispatch({
-        type: SETUP_USER_SUCCESS,
-        payload: { data },
-      });
-    } catch (error) {
-      dispatch({
-        type: SETUP_USER_ERROR,
-        payload: { msg: error.response.data.msg },
-      });
-    }
-    clearAlert();
+  const setupUser = async (user, token) => {
+    // dispatch({ type: SETUP_USER_BEGIN });
+    dispatch({
+      type: LOGIN_USER_SUCCESS,
+      payload: { token, user },
+    })
+    clearAlert()
   };
+
+
   const toggleSidebar = () => {
     dispatch({ type: TOGGLE_SIDEBAR });
   };
@@ -208,31 +191,42 @@ const AppProvider = ({ children }) => {
   //   }
   //   clearAlert();
   // };
-  
 
-  const logoutUser = async () => {
-    // await authFetch.get('/auth/logout');
-    // dispatch({ type: LOGOUT_USER });
+
+  const logoutUser = async (token) => {
+    try {
+      axios.post('/auth/logout', {}, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      localStorageService.clearAll();
+      dispatch({ type: LOGOUT_USER })
+
+    } catch (error) {
+      console.log(error)
+
+    }
   };
   const updateUser = async (currentUser) => {
-    dispatch({ type: UPDATE_USER_BEGIN });
-    try {
-      const { data } = await authFetch.patch('/auth/updateUser', currentUser);
-      const { user, location } = data;
+    // dispatch({ type: UPDATE_USER_BEGIN });
+    // try {
+    //   const { data } = await authFetch.patch('/auth/updateUser', currentUser);
+    //   const { user, location } = data;
 
-      dispatch({
-        type: UPDATE_USER_SUCCESS,
-        payload: { user, location },
-      });
-    } catch (error) {
-      if (error.response.status !== 401) {
-        dispatch({
-          type: UPDATE_USER_ERROR,
-          payload: { msg: error.response.data.msg },
-        });
-      }
-    }
-    clearAlert();
+    //   dispatch({
+    //     type: UPDATE_USER_SUCCESS,
+    //     payload: { user, location },
+    //   });
+    // } catch (error) {
+    //   if (error.response.status !== 401) {
+    //     dispatch({
+    //       type: UPDATE_USER_ERROR,
+    //       payload: { msg: error.response.data.msg },
+    //     });
+    //   }
+    // }
+    // clearAlert();
   };
 
   const handleChange = ({ name, value }) => {
@@ -264,10 +258,34 @@ const AppProvider = ({ children }) => {
     // clearAlert();
   };
 
-  const getJobs = async () => {
+  const getJobs = async (courses) => {
+    dispatch({ type: GET_JOBS_BEGIN });
+
+    dispatch({
+      type: GET_JOBS_SUCCESS,
+      payload: { courses },
+    })
+    clearAlert();
+  };
+
+  // const getSearchCourses = async (query) => {
+  //   dispatch({ type: GET_JOBS_BEGIN });
+  //   try {
+  //     const courses = courseService.search(query)
+  //     // store sourse
+  //     dispatch({
+  //       type: GET_SEARCH_JOBS_SUCCESS,
+  //       payload: { courses }
+  //     })
+  //   }
+  //   catch (error) {
+  //     console.log(error)
+  //   }
+  // };
+  const getCourses = async () => {
     // const { page, search, searchStatus, searchType, sort } = state;
 
-    // let url = `/jobs?page=${page}&status=${searchStatus}&jobType=${searchType}&sort=${sort}`;
+    // let url = `/course?page=${page}&status=${searchStatus}&jobType=${searchType}&sort=${sort}`;
     // if (search) {
     //   url = url + `&search=${search}`;
     // }
@@ -287,7 +305,8 @@ const AppProvider = ({ children }) => {
     //   logoutUser();
     // }
     // clearAlert();
-  };
+
+  }
 
   const setEditJob = (id) => {
     // dispatch({ type: SET_EDIT_JOB, payload: { id } });
@@ -391,7 +410,7 @@ const AppProvider = ({ children }) => {
         clearFilters,
         changePage,
         loginUser,
-        registerUser
+        registerUser,
       }}
     >
       {children}
