@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 
 @RequiredArgsConstructor
-@Component
+//@Component
 public class SampleData {
     private final AuthenticationService authenticationService;
     private final CourseService courseService;
@@ -52,7 +52,7 @@ public class SampleData {
     }
 
     private void addSampleCourses() throws Exception {
-        final String description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.";
+        final String description = "Lorem Ipsum is simply dummy book.";
         Course course1 = Course.builder()
                 .courseCode("CS 0001")
                 .name("OOP")

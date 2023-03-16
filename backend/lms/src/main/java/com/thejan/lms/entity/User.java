@@ -18,7 +18,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@EqualsAndHashCode()
 //@Inheritance(strategy = InheritanceType.JOINED)
 //@Inheritance(strategy = InheritanceType.JOINED)
 public class User implements UserDetails {
@@ -90,16 +89,4 @@ public class User implements UserDetails {
 		return true;
 	}
 
-
-	@Override
-	public String toString() {
-		return "User{" +
-				"id=" + id +
-				", email='" + email + '\'' +
-				", password='" + password + '\'' +
-				", firstName='" + firstName + '\'' +
-				", lastName='" + lastName + '\'' +
-				", role=" + role +
-				'}';
-	}
 }

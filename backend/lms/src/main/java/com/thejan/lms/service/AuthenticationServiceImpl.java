@@ -64,7 +64,8 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
             return RegisterResponse.builder()
                     .email(user.getEmail())
-                    .name(user.getFirstName()+" "+user.getLastName())
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
                     .role(user.getRole())
                     .build();
 
@@ -92,7 +93,8 @@ public class AuthenticationServiceImpl implements AuthenticationService{
             return AuthenticationResponse.builder()
                     .token(jwtToken)
                     .email(user.getEmail())
-                    .name(user.getFirstName()+" "+user.getLastName())
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
                     .role(user.getRole())
                     .build();
 

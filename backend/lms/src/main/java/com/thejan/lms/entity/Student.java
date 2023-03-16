@@ -36,4 +36,9 @@ public class Student extends User{
     @JsonIgnore
     private Set<StudentCourseRegistration> registrations;
 
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
 }

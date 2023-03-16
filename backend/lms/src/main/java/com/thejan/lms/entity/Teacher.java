@@ -12,7 +12,6 @@ import java.util.Set;
 @Entity
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 //@PrimaryKeyJoinColumn(name = "teacherId")
 public class Teacher extends User {
 
@@ -22,6 +21,11 @@ public class Teacher extends User {
 
     public Teacher(User user) {
         super(user);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 
 }

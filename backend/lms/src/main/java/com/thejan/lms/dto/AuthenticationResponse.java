@@ -14,7 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class AuthenticationResponse {
     private String token;
     private String email;
-    private String name;
+    private String firstName;
+    private String lastName;
     private Role role;
 }
 

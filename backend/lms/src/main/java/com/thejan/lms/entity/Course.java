@@ -8,13 +8,13 @@ import lombok.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-//@EqualsAndHashCode(callSuper = true)
 public class Course {
 
     @Id
@@ -38,8 +38,18 @@ public class Course {
     @JsonIgnore
     private Set<StudentCourseRegistration> registrations;
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 
-
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return id == course.id && Objects.equals(name, course.name) && Objects.equals(courseCode, course.courseCode) && Objects.equals(description, course.description) && Objects.equals(conductor, course.conductor) && Objects.equals(registrations, course.registrations);
+    }
 }
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)

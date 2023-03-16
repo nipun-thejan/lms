@@ -49,7 +49,7 @@ public class UserServiceTest {
                 new Student(user)
         );
         User resultUser = userService.getUser(email);
-        // Then - Assert/Verify
+    // Then - Assert/Verify
         assertEquals(email, resultUser.getEmail());
     }
 }
